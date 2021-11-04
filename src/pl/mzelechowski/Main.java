@@ -13,8 +13,9 @@ public class Main {
 // program odczytujący dane od użytkowania Imię, Nazwisko i zapisujący do pliku doddając date na początku każdej linii
     public static void main(String[] args) {
         List<User> users = getUsers();
+        String fileName="listaosob";
         try {
-            saveToFile("listaosob", users);
+            saveToFile(fileName, users);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
