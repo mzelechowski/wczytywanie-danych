@@ -1,7 +1,5 @@
 package pl.mzelechowski;
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         List<User> users = getUsers();
         try {
-            saveToFile("listaosbo", users);
+            saveToFile("listaosob", users);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -30,7 +28,7 @@ public class Main {
             String input = scanner.nextLine();
             while(!input.equalsIgnoreCase("x") && !input.isEmpty()) {
                 String[] inputs = input.split(" ");
-                users.add(new User(fromUtilToString(new Date()), inputs[0], inputs[1], Integer.valueOf(inputs[2])));
+                users.add(new User(fromUtilToString(new Date()), inputs[0], inputs[1], Integer.parseInt(inputs[2])));
                 System.out.println("Podaj dane kolejnego klienta (imię, nazwisko, wiek oddzielając spacją): ");
                 input = scanner.nextLine();
             }
@@ -42,9 +40,8 @@ public class Main {
          return newFormat.format(date);
         }
 
-        private static void saveToFile(String filename, List<User> users) throws IOException {
+        private static void saveToFile(String fileName, List<User> users) throws IOException {
             String folder = "C:\\Mike\\wczytywanie-danych\\src\\";
-            String fileName = "jakisplik";
             String fileExtension=".csv";
             Path path = Paths.get(folder+fileName+fromUtilToString(new Date()).split(" ")[0]+fileExtension);
             if(Files.notExists(path)) {
