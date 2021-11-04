@@ -15,8 +15,11 @@ public class Main {
 // program odczytujący dane od użytkowania Imię, Nazwisko i zapisujący do pliku doddając date na początku każdej linii
     public static void main(String[] args) {
         List<User> users = getUsers();
-
-
+        try {
+            saveToFile("listaosbo", users);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
 
     }
@@ -25,7 +28,7 @@ public class Main {
             List<User> users = new ArrayList<>();
             System.out.println("Podaj dane klienta (imię, nazwisko, wiek oddzielając spacją): ");
             String input = scanner.nextLine();
-            while(!input.equalsIgnoreCase("x")) {
+            while(!input.equalsIgnoreCase("x") && !input.isEmpty()) {
                 String[] inputs = input.split(" ");
                 users.add(new User(fromUtilToString(new Date()), inputs[0], inputs[1], Integer.valueOf(inputs[2])));
                 System.out.println("Podaj dane kolejnego klienta (imię, nazwisko, wiek oddzielając spacją): ");
@@ -40,18 +43,18 @@ public class Main {
         }
 
         private static void saveToFile(String filename, List<User> users) throws IOException {
-            String folder = "C:\\Mike\\operacje-na-plokach\\src\\storage\\";
+            String folder = "C:\\Mike\\wczytywanie-danych\\src\\";
             String fileName = "jakisplik";
-            String fileExtension="csv";
-            Path path = Paths.get(folder+fileName+fromUtilToString(new Date())+fileExtension);
-            if(Files.notExists(path)) Files.createFile(path);
-            StringBuilder sb = new StringBuilder();
+            String fileExtension=".csv";
+            Path path = Paths.get(folder+fileName+fromUtilToString(new Date()).split(" ")[0]+fileExtension);
+            if(Files.notExists(path)) {
+                Files.createFile(path);
+                String columns ="Date; Name; Last Name; Age\n";
+                Files.write(path, columns.getBytes(), StandardOpenOption.APPEND);
+            }
             for(User u:users){
-                sb.append(u.getDate()).append(";")
-                        .append(u.getName()).append(";")
-                        .append(u.getLastName()).append(";")
-                        .append(u.getAge()).append("\n");
-                Files.write(path, sb.toString().getBytes(), StandardOpenOption.APPEND);
+                String sb=u.getDate()+";"+u.getName()+";"+u.getLastName()+";"+u.getAge()+"\n";
+                Files.write(path, sb.getBytes(), StandardOpenOption.APPEND);
             }
         }
 }
